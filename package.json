@@ -1,0 +1,22 @@
+{
+  "name": "@dgck81lnn/samrux",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "DGCK81LNN <triluolnn@163.com>",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "@node-rs/jieba": "^1.6.1"
+  },
+  "devDependencies": {
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "eslint": "^8.20.0",
+    "mocha": "^10.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
+  }
+}

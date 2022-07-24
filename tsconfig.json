@@ -1,0 +1,12 @@
+{
+  "files": [
+    "match.ts",
+    "match-test.ts"
+  ],
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "target": "es2020"
+  }
+}
