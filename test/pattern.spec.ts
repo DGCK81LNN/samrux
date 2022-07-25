@@ -7,9 +7,9 @@ import {
   Pattern,
 } from "../src/pattern"
 
-describe("pattern", () => {
-  describe("WordMatcher", () => {
-    it("matches a specified word", () => {
+describe("pattern", function () {
+  describe("WordMatcher", function () {
+    it("matches a specified word", function () {
       const m = new WordMatcher("能否", "*")
       const input1 = [
         { tag: "v", word: "能否" },
@@ -22,7 +22,7 @@ describe("pattern", () => {
       assert.deepEqual([...m.match(input1, 0)], [1])
       assert.deepEqual([...m.match(input2, 0)], [])
     })
-    it("matches any word when '*' is specified", () => {
+    it("matches any word when '*' is specified", function () {
       const m = new WordMatcher("*", "*")
       const input = [
         { tag: "c", word: "然而" },
@@ -39,7 +39,7 @@ describe("pattern", () => {
       assert.deepEqual([...m.match(input, 4)], [5])
       assert.deepEqual([...m.match(input, 5)], [6])
     })
-    it("matches a word with the specified POS", () => {
+    it("matches a word with the specified POS", function () {
       const m = new WordMatcher("*", "r*")
       const input = [
         { tag: "r", word: "他" },
@@ -51,8 +51,8 @@ describe("pattern", () => {
     })
   })
 
-  describe("PhraseMatcher", () => {
-    it("matches the sum of consecutive words", () => {
+  describe("PhraseMatcher", function () {
+    it("matches the sum of consecutive words", function () {
       const m = new PhraseMatcher("纯真灵魂")
       const input = [
         { tag: "a", word: "纯真" },
@@ -60,7 +60,7 @@ describe("pattern", () => {
       ]
       assert.deepEqual([...m.match(input, 0)], [2])
     })
-    it("supports wildcards", () => {
+    it("supports wildcards", function () {
       const m = new PhraseMatcher("处女*")
       const input = [
         { tag: "eng", word: "Judy" },
@@ -70,7 +70,7 @@ describe("pattern", () => {
       ]
       assert.deepEqual([...m.match(input, 2)], [3, 4])
     })
-    it("matches any number of words for '*'", () => {
+    it("matches any number of words for '*'", function () {
       const m = new PhraseMatcher("*")
       const input = [
         { tag: "eng", word: "Judy" },
@@ -82,8 +82,8 @@ describe("pattern", () => {
     })
   })
 
-  describe("GroupMatcher", () => {
-    it("matches with multiple matchers in a row", () => {
+  describe("GroupMatcher", function () {
+    it("matches with multiple matchers in a row", function () {
       const m = new GroupMatcher([
         [new PhraseMatcher("*"), new PhraseMatcher("处女*")],
       ])
@@ -102,7 +102,7 @@ describe("pattern", () => {
       assert.deepEqual([...m.match(input2, 0)], [])
     })
 
-    it("handles alternation", () => {
+    it("handles alternation", function () {
       const m = new GroupMatcher([
         [new WordMatcher("*", "r"), new PhraseMatcher("爸爸")],
         [new WordMatcher("*", "r"), new PhraseMatcher("妈妈")],
@@ -119,9 +119,9 @@ describe("pattern", () => {
     })
   })
 
-  describe("Pattern", () => {
-    describe(".compile()", () => {
-      it("compiles pattern expressions", () => {
+  describe("Pattern", function () {
+    describe(".compile()", function () {
+      it("compiles pattern expressions", function () {
         const expected = new Pattern(
           new GroupMatcher([
             [
@@ -137,7 +137,7 @@ describe("pattern", () => {
         assert.deepEqual(Pattern.compile("[*|r] { 爸爸 | 妈妈 }"), expected)
       })
 
-      it("supports captures", () => {
+      it("supports captures", function () {
         const capture1 = new GroupMatcher([
           [
             new WordMatcher("*", "r"),
@@ -157,7 +157,7 @@ describe("pattern", () => {
         )
       })
 
-      it("supports templates", () => {
+      it("supports templates", function () {
         const expected = new Pattern(
           new GroupMatcher([
             [
@@ -180,7 +180,7 @@ describe("pattern", () => {
         assert.deepEqual(Pattern.compile("{{myparent}} *", templates), expected)
       })
 
-      it("supports nested templates", () => {
+      it("supports nested templates", function () {
         const expected = new Pattern(
           new GroupMatcher([
             [
@@ -205,8 +205,8 @@ describe("pattern", () => {
       })
     })
 
-    describe("#match()", () => {
-      it("looks for the pattern in the input", () => {
+    describe("#match()", function () {
+      it("looks for the pattern in the input", function () {
         const p = Pattern.compile("我想 [*] 你")
         const input = [
           { tag: "r", word: "我" },
@@ -220,8 +220,8 @@ describe("pattern", () => {
       })
     })
 
-    describe("#matchWhole()", () => {
-      it("matches against the whole sentence", () => {
+    describe("#matchWhole()", function () {
+      it("matches against the whole sentence", function () {
         const p = Pattern.compile("我想 ( * ) 你 ( * )")
         const input = [
           { tag: "r", word: "我" },
