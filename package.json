@@ -2,7 +2,9 @@
   "name": "@dgck81lnn/samrux",
   "version": "0.0.0-alpha.1.0",
   "main": "lib/index.js",
-  "files": ["/lib"],
+  "files": [
+    "/lib"
+  ],
   "scripts": {
     "test": "mocha"
   },
@@ -12,9 +14,11 @@
     "@node-rs/jieba": "^1.6.1"
   },
   "devDependencies": {
+    "@types/chai": "^4.3.1",
     "@types/mocha": "^9.1.1",
     "@types/node": "^18.0.6",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "chai": "^4.3.6",
     "eslint": "^8.20.0",
     "mocha": "^10.0.0",
     "ts-node": "^10.9.1",

@@ -1,5 +1,5 @@
-import { strict as assert } from "node:assert"
-import { escapeRegExp, shuffle } from "../src/utils"
+const { expect } = require("chai")
+const { escapeRegExp, shuffle } = require("../src/utils.ts")
 
 describe("utils", function () {
   describe("escapeRegExp()", function () {
@@ -7,7 +7,7 @@ describe("utils", function () {
       const str = String.raw`|\{}()[]^$+*?.-`
       const escaped = escapeRegExp(str)
       const re = new RegExp(`^${escaped}$`)
-      assert.match(str, re)
+      expect(str).to.match(re)
     })
   })
 
@@ -25,12 +25,14 @@ describe("utils", function () {
         for (let j = 0; j < len; ++j) sums[j] += shuffled[j]
       }
 
-      const errors = sums.map(sum => sum / times - expectedAverage)
+      const averages = sums.map(sum => sum / times)
+      const msg = `Average values of shuffled arrays should be within ${expectedAverage} ± ${maxError}, got ${averages}`
 
-      assert(
-        errors.every(error => Math.abs(error) < maxError),
-        `Expected average values of shuffled arrays to be ${expectedAverage} ± ${maxError}, got ${errors}`
-      )
+      expect(
+        averages.every(
+          average => Math.abs(average - expectedAverage) <= maxError
+        )
+      ).to.be.true
     })
   })
 })

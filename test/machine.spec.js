@@ -1,5 +1,5 @@
-import { strict as assert } from "node:assert"
-import { Machine, Response } from "../src/machine"
+const { expect } = require("chai")
+const { Machine, Response } = require("../src/machine.ts")
 
 describe("machine", function () {
   describe("Machine", function () {

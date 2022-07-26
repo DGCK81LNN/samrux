@@ -1,11 +1,11 @@
-import { strict as assert } from "node:assert"
-import {
+const { expect } = require("chai")
+const {
   WordMatcher,
   PhraseMatcher,
   GroupMatcher,
   PatternCompileError,
   Pattern,
-} from "../src/pattern"
+} = require("../src/pattern.ts")
 
 describe("pattern", function () {
   describe("WordMatcher", function () {
@@ -19,8 +19,8 @@ describe("pattern", function () {
         { tag: "v", word: "能" },
         { tag: "v", word: "否定" },
       ]
-      assert.deepEqual([...m.match(input1, 0)], [1])
-      assert.deepEqual([...m.match(input2, 0)], [])
+      expect([...m.match(input1, 0)]).to.eql([1])
+      expect([...m.match(input2, 0)]).to.eql([])
     })
     it("matches any word when '*' is specified", function () {
       const m = new WordMatcher("*", "*")
@@ -32,12 +32,12 @@ describe("pattern", function () {
         { tag: "n", word: "卵" },
         { tag: "p", word: "用" },
       ]
-      assert.deepEqual([...m.match(input, 0)], [1])
-      assert.deepEqual([...m.match(input, 1)], [2])
-      assert.deepEqual([...m.match(input, 2)], [3])
-      assert.deepEqual([...m.match(input, 3)], [4])
-      assert.deepEqual([...m.match(input, 4)], [5])
-      assert.deepEqual([...m.match(input, 5)], [6])
+      expect([...m.match(input, 0)]).to.eql([1])
+      expect([...m.match(input, 1)]).to.eql([2])
+      expect([...m.match(input, 2)]).to.eql([3])
+      expect([...m.match(input, 3)]).to.eql([4])
+      expect([...m.match(input, 4)]).to.eql([5])
+      expect([...m.match(input, 5)]).to.eql([6])
     })
     it("matches a word with the specified POS", function () {
       const m = new WordMatcher("*", "r*")
@@ -46,8 +46,8 @@ describe("pattern", function () {
         { tag: "n", word: "妈妈" },
         { tag: "uj", word: "的" },
       ]
-      assert.deepEqual([...m.match(input, 0)], [1])
-      assert.deepEqual([...m.match(input, 1)], [])
+      expect([...m.match(input, 0)]).to.eql([1])
+      expect([...m.match(input, 1)]).to.eql([])
     })
   })
 
@@ -58,7 +58,7 @@ describe("pattern", function () {
         { tag: "a", word: "纯真" },
         { tag: "n", word: "灵魂" },
       ]
-      assert.deepEqual([...m.match(input, 0)], [2])
+      expect([...m.match(input, 0)]).to.eql([2])
     })
     it("supports wildcards", function () {
       const m = new PhraseMatcher("处女*")
@@ -68,7 +68,7 @@ describe("pattern", function () {
         { tag: "n", word: "处女座" },
         { tag: "uj", word: "的" },
       ]
-      assert.deepEqual([...m.match(input, 2)], [3, 4])
+      expect([...m.match(input, 2)]).to.eql([3, 4])
     })
     it("matches any number of words for '*'", function () {
       const m = new PhraseMatcher("*")
@@ -78,7 +78,7 @@ describe("pattern", function () {
         { tag: "n", word: "处女座" },
         { tag: "uj", word: "的" },
       ]
-      assert.deepEqual([...m.match(input, 0)], [0, 1, 2, 3, 4])
+      expect([...m.match(input, 0)]).to.eql([0, 1, 2, 3, 4])
     })
   })
 
@@ -98,8 +98,8 @@ describe("pattern", function () {
         { tag: "n", word: "工信处" },
         { tag: "n", word: "女干事" },
       ]
-      assert.deepEqual([...m.match(input1, 0)], [3, 4])
-      assert.deepEqual([...m.match(input2, 0)], [])
+      expect([...m.match(input1, 0)]).to.eql([3, 4])
+      expect([...m.match(input2, 0)]).to.eql([])
     })
 
     it("handles alternation", function () {
@@ -112,10 +112,10 @@ describe("pattern", function () {
         { tag: "r", word: "我" },
         { tag: "n", word: "爸爸" },
       ]
-      assert.deepEqual([...m.match(input, 0)], [2])
+      expect([...m.match(input, 0)]).to.eql([2])
 
       input[1].word = "妈妈"
-      assert.deepEqual([...m.match(input, 0)], [2])
+      expect([...m.match(input, 0)]).to.eql([2])
     })
   })
 
@@ -134,7 +134,7 @@ describe("pattern", function () {
           ])
         )
 
-        assert.deepEqual(Pattern.compile("[*|r] { 爸爸 | 妈妈 }"), expected)
+        expect(Pattern.compile("[*|r] { 爸爸 | 妈妈 }")).to.eql(expected)
       })
 
       it("supports captures", function () {
@@ -151,10 +151,7 @@ describe("pattern", function () {
         const expected = new Pattern(new GroupMatcher([[capture1, capture2]]))
         expected.captures.push(capture1, capture2)
 
-        assert.deepEqual(
-          Pattern.compile("( [*|r] { 爸爸 | 妈妈 } ) ( * )"),
-          expected
-        )
+        expect(Pattern.compile("([*|r]{爸爸|妈妈})(*)")).to.eql(expected)
       })
 
       it("supports templates", function () {
@@ -177,7 +174,7 @@ describe("pattern", function () {
         const templates = {
           myparent: "[我] { 爸爸 | 妈妈 }",
         }
-        assert.deepEqual(Pattern.compile("{{myparent}} *", templates), expected)
+        expect(Pattern.compile("{{myparent}} *", templates)).to.eql(expected)
       })
 
       it("supports nested templates", function () {
@@ -201,7 +198,7 @@ describe("pattern", function () {
           parent: "爸爸 | 妈妈",
           myparent: "[我] {{parent}}",
         }
-        assert.deepEqual(Pattern.compile("{{myparent}} *", templates), expected)
+        expect(Pattern.compile("{{myparent}} *", templates)).to.eql(expected)
       })
     })
 
@@ -216,7 +213,7 @@ describe("pattern", function () {
           { tag: "m", word: "一件" },
           { tag: "n", word: "事" },
         ]
-        assert.deepEqual(p.match(input), ["我想问你"])
+        expect(p.match(input)).to.eql([input.slice(0, 4)])
       })
     })
 
@@ -231,11 +228,7 @@ describe("pattern", function () {
           { tag: "m", word: "一件" },
           { tag: "n", word: "事" },
         ]
-        assert.deepEqual(p.matchWhole(input), [
-          "我想问你一件事",
-          "问",
-          "一件事",
-        ])
+        expect(p.matchWhole(input)).to.eql([input, [input[2]], input.slice(4)])
       })
     })
   })
