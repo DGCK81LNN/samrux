@@ -1,0 +1,27 @@
+{
+  "pre": {},
+  "post": {
+    "我": "你",
+    "你": "我"
+  },
+  "initFlags": [],
+  "templates": {},
+  "groups": [
+    {
+      "name": "test",
+      "keywords": [
+        {
+          "expr": "你好",
+          "weight": 1,
+          "decomposers": [
+            {
+              "expr": "*",
+              "shufflePhrases": true,
+              "phrases": ["你好啊，有什么想聊的吗？"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

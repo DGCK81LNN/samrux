@@ -2,13 +2,13 @@ import type { TaggedWord } from "@node-rs/jieba"
 import { escapeRegExp } from "./utils"
 
 export interface Matchable {
-  matchedText?: string | null
+  matchedText?: TaggedWord[] | null
 
   match(stream: TaggedWord[], start: number): Generator<number>
 }
 
 export class WordMatcher implements Matchable {
-  matchedText?: string | null
+  matchedText?: TaggedWord[] | null
 
   constructor(public readonly word: string, public readonly tag: string) {}
 
@@ -22,13 +22,13 @@ export class WordMatcher implements Matchable {
         if (!tag.startsWith(this.tag.slice(0, -1))) return
       } else if (this.tag !== tag) return
     }
-    this.matchedText = word
+    this.matchedText = [stream[start]]
     yield start + 1
   }
 }
 
 export class PhraseMatcher implements Matchable {
-  matchedText?: string | null
+  matchedText?: TaggedWord[] | null
 
   private phraseRe: RegExp
 
@@ -42,20 +42,20 @@ export class PhraseMatcher implements Matchable {
     let phrase = ""
     for (let i = start; i < stream.length; ++i) {
       if (this.phraseRe.test(phrase)) {
-        this.matchedText = phrase
+        this.matchedText = stream.slice(start, i)
         yield i
       }
       phrase += stream[i].word
     }
     if (this.phraseRe.test(phrase)) {
-      this.matchedText = phrase
+      this.matchedText = stream.slice(start)
       yield stream.length
     }
   }
 }
 
 export class GroupMatcher implements Matchable {
-  matchedText?: string | null
+  matchedText?: TaggedWord[] | null
 
   constructor(public readonly alternations: Matchable[][] = [[]]) {}
 
@@ -69,10 +69,10 @@ export class GroupMatcher implements Matchable {
 
   *match(stream: TaggedWord[], start: number) {
     const stack: Generator<number>[] = []
-    const textStack: string[] = []
+    const textStack: TaggedWord[][] = []
     for (const alternation of this.alternations) {
       if (!alternation.length) {
-        this.matchedText = ""
+        this.matchedText = []
         yield start
         continue
       }
@@ -90,7 +90,7 @@ export class GroupMatcher implements Matchable {
           textStack.push(text)
           stack.push(alternation[stack.length].match(stream, end))
         } else {
-          this.matchedText = textStack.join("") + text
+          this.matchedText = textStack.flat().concat(text)
           yield end
         }
       }
