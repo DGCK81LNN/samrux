@@ -31,7 +31,8 @@ describe("utils", function () {
       expect(
         averages.every(
           average => Math.abs(average - expectedAverage) <= maxError
-        )
+        ),
+        msg
       ).to.be.true
     })
   })
