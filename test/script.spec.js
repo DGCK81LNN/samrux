@@ -103,11 +103,18 @@ describe("script", function () {
     })
   })
 
-  describe("Keyword#decompose()", function () {
-    it("tries to decompose the input using its decomposers")
+  describe("Keyword", function () {
+    describe("#decompose()", function () {
+      it("tries to decompose the input using its decomposers")
+    })
   })
 
-  describe("Decomposer#decompose()", function () {
-    it("tries to decompose the input")
+  describe("Decomposer", function () {
+    describe("#getPhrase()", function () {
+      it("generates a phrase")
+    })
+    describe("#decompose()", function () {
+      it("tries to decompose the input")
+    })
   })
 })
